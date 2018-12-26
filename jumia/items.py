@@ -11,7 +11,7 @@ import scrapy
 class JumiaItem(scrapy.Item):
     # define the fields for your item here like:
     marque = scrapy.Field()
-    modele = scrapy.Field()
+    #modele = scrapy.Field()
     boite_de_vitesse = scrapy.Field()
     kilometrage = scrapy.Field()
     annee = scrapy.Field()

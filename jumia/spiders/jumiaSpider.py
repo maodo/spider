@@ -13,28 +13,22 @@ class jumiaSpider(scrapy.Spider):
     
     def parse_details(self,response):
         item = JumiaItem()
-        proprietes,cle = response.css('div.new-attr-style>h3>span::text').extract(),response.css('div.new-attr-style>h3::text').extract()
-        cle.pop(0)
+        proprietes = response.css('div.new-attr-style>h3>span::text').extract()
         item['prix'] = response.css('span.price> span::text').extract_first()
-        item['marque'] = response.css('div.new-attr-style>h3>span>a::text').extract_first()
-        if(len(proprietes)==len(cle)==5):
-            item['modele'] = proprietes[0]
-            item['boite_de_vitesse'] = proprietes[1]
-            item['type_de_carburant'] = proprietes[2]
-            item['annee'] = proprietes[3]
-            item['kilometrage'] = proprietes[4]
-        elif(len(proprietes)==len(cle)==4):
-            if(cle[3]=="Année"):
-                item['annee'] = proprietes[3]
-                item['kilometrage'] = "unknown"
-            elif(cle[3]=="Kilométrage") :
-                item['kilometrage'] = proprietes[3]
-                item['annee'] = "unknown"
+        m = response.css('div.new-attr-style>h3>span>a::text').extract()
+        item['marque'] = str(m[0])+" "+str(m[1])
+        #item['modele'] = m[1]
+    
+        item['boite_de_vitesse'] = proprietes[0]
+        item['type_de_carburant'] = proprietes[1]
+        item['annee'] = proprietes[2]
+        item['kilometrage'] = proprietes[3]
+        
             
         
-        details_vendeur = response.css('div.seller-details')
-        det = details_vendeur.css('dd>span::text').extract()
-        item['date_post'] = details_vendeur.css('dd>time::text').extract_first()
+        #details_vendeur = response.css('div.seller-details')
+        #det = details_vendeur.css('dd>span::text').extract()
+        #item['date_post'] = details_vendeur.css('dd>time::text').extract_first()
         # if len(det)==2 :
         #     item['localisation'] = det[1]
         #     item['nom_vendeur'] =  det[0]
@@ -67,8 +61,8 @@ class jumiaSpider(scrapy.Spider):
             yield Request(url = url,callback=self.parse_details)
         
 
-        next_page_url = response.css('li.next>a::attr(href)').extract_first()
+        #next_page_url = response.css('li.next>a::attr(href)').extract_first()
 
-        if(next_page_url) : 
-        	next_page_url = response.urljoin(next_page_url)
-        	yield scrapy.Request(url = next_page_url,callback = self.parse)
+        #if(next_page_url) : 
+        	#next_page_url = response.urljoin(next_page_url)
+        	#yield scrapy.Request(url = next_page_url,callback = self.parse)
