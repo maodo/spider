@@ -61,8 +61,8 @@ class jumiaSpider(scrapy.Spider):
             yield Request(url = url,callback=self.parse_details)
         
 
-        #next_page_url = response.css('li.next>a::attr(href)').extract_first()
+        next_page_url = response.css('li.next>a::attr(href)').extract_first()
 
-        #if(next_page_url) : 
-        	#next_page_url = response.urljoin(next_page_url)
-        	#yield scrapy.Request(url = next_page_url,callback = self.parse)
+        if(next_page_url) : 
+        	next_page_url = response.urljoin(next_page_url)
+        	yield scrapy.Request(url = next_page_url,callback = self.parse)
